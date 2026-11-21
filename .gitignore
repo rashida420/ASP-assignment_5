@@ -1,0 +1,19 @@
+# C++ executable files
+*.exe
+*.out
+
+# Object files
+*.o
+*.obj
+
+# Debug/build files
+*.dll
+*.pdb
+*.ilk
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
