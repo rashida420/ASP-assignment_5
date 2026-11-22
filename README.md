@@ -2,7 +2,7 @@
 
 ## Imperative Solution (C++)
 
-### C++ Implementation
+### C++ Implementation - Recursive Approach
 
 I used a `vector<int>` to store the numbers from 1 to N. The main idea is to simulate the elimination process by creating a new vector after each move and keeping only the elements that should remain. I implemented this process inside a recursive function called `game`. It takes the current vector as an argument and returns an integer, which is the last remaining number.
 
@@ -11,18 +11,25 @@ At the beginning of each function call, I check whether the vector contains only
 The function then calls itself with the newly created vector. This continues until only one element remains, which is returned as the final result.
 The following is the part of my code where I create a new vector and add the elements that should remain:
 ```
-vector<int> next_arr;
+int game(vector<int> arr){
+    if(arr.size()==1){
+        return arr[0];
+    }
+    vector<int> next_arr;
+    for(int i=0; i<arr.size(); i++){
+        if(mv==1 && i%2 ==0){
+            next_arr.push_back(arr[i]);
+        }
+        else if (mv==2 && i%2 ==1){
+            next_arr.push_back(arr[i]);
+        }
+        else if (mv==3 && (i+1) % 3 != 0){
+            next_arr.push_back(arr[i]);
+        }
+    }
+    mv = mv % 3 +1;
+    return game(next_arr);
 
-for(int i=0; i<arr.size(); i++){
-    if(mv==1 && i%2==0){
-        next_arr.push_back(arr[i]);
-    }
-    else if(mv==2 && i%2==1){
-        next_arr.push_back(arr[i]);
-    }
-    else if(mv==3 && (i+1)%3!=0){
-        next_arr.push_back(arr[i]);
-    }
 }
 ```
 
@@ -42,6 +49,8 @@ After receiving a memory overflow on Test 29, I decided to improve my implementa
 In my new implementation I changed the function to receive the vector by reference (`vector<int>& arr`) and modified the existing vector instead of creating a new one. I used `arr[j++] = arr[i]` to keep the elements that should remain and `arr.resize(j)` to update the vector's size after each move. In the end I wrote `arr.reserve(n)` to allocate enough capacity for the initial number of elements in advance.
 
 These changes reduced memory usage and resolved the memory overflow problem. After updating the implementation, I received 100/100 on E-olymp.
+
+### Submission Result
 
 <img width="436" height="59" alt="cpp_result3" src="https://github.com/user-attachments/assets/4b56cfc3-c007-4457-a0b4-f18d075eb678" />
 
