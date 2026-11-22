@@ -10,6 +10,7 @@ At the beginning of each function call, I check whether the vector contains only
 
 The function then calls itself with the newly created vector. This continues until only one element remains, which is returned as the final result.
 The following is the part of my code where I create a new vector and add the elements that should remain:
+```
 vector<int> next_arr;
 
 for(int i=0; i<arr.size(); i++){
@@ -23,6 +24,7 @@ for(int i=0; i<arr.size(); i++){
         next_arr.push_back(arr[i]);
     }
 }
+```
 
 ### Submission Result
 
