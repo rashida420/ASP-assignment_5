@@ -9,14 +9,39 @@ I used a `vector<int>` to store the numbers from 1 to N. The main idea is to sim
 At the beginning of each function call, I check whether the vector contains only one element. If it does, the function returns that element. This is the base case that stops the recursion Otherwise, the function goes through the current vector and adds the elements that should remain to a new vector, depending on the current move. I use a variable called `mv` to keep track of the move. After each elimination, I update it so that the next rule is applied.
 
 The function then calls itself with the newly created vector. This continues until only one element remains, which is returned as the final result.
+The following is the part of my code where I create a new vector and add the elements that should remain:
+vector<int> next_arr;
+
+for(int i=0; i<arr.size(); i++){
+    if(mv==1 && i%2==0){
+        next_arr.push_back(arr[i]);
+    }
+    else if(mv==2 && i%2==1){
+        next_arr.push_back(arr[i]);
+    }
+    else if(mv==3 && (i+1)%3!=0){
+        next_arr.push_back(arr[i]);
+    }
+}
 
 ### Submission Result
 
 **E-olymp Result: 97/100**
+
 <img width="467" height="131" alt="cpp_result" src="https://github.com/user-attachments/assets/5fccbb90-53e2-4adb-aa34-a8145fb47dc2" />
 
 My C++ implementation passed 97% of the test cases. For Test 29, the memory usage reached the 512 MB limit. I think this happened because each recursive call creates a new vector to store the remaining elements. At the same time the previous vectors are still in memory because their function calls have not finished. As a result, multiple vectors occupy memory at the same time. 
 This implementation did not exceed the time limit, the only issue was memory usage.
+
+### Updated C++ Implementation(Memory Optimization)
+
+After receiving a memory overflow on Test 29, I decided to improve my implementation. In my original solution, each recursive call created a new vector to store the remaining elements. This caused multiple vectors to occupy memory at the same time.
+
+In my new implementation I changed the function to receive the vector by reference (`vector<int>& arr`) and modified the existing vector instead of creating a new one. I used `arr[j++] = arr[i]` to keep the elements that should remain and `arr.resize(j)` to update the vector's size after each move. In the end I wrote `arr.reserve(n)` to allocate enough capacity for the initial number of elements in advance.
+
+These changes reduced memory usage and resolved the memory overflow problem. After updating the implementation, I received 100/100 on E-olymp.
+
+<img width="436" height="59" alt="cpp_result3" src="https://github.com/user-attachments/assets/4b56cfc3-c007-4457-a0b4-f18d075eb678" />
 
 
 ## Functional Implementation (Haskell)
@@ -83,5 +108,9 @@ I referred to the lecture notes for  the implementation, especially list compreh
 
 My Haskell implementation passed 97% of the test cases. All tests passed except Test 29, it exceeded the time limit of 5,000 ms.
 I noticed that the Haskell implementation takes more time when processing some of the test cases. I think this is mainly related to the overhead of list processing in Haskell compared to C++. In my solution, the `game` function is called recursively, and a new list is created after each elimination step. I also use `zip` to get the positions of the elements and list comprehensions to filter the list. One difference I noticed is how the two languages store lists in memory. C++ vectors store their elements next to each other in a continuous block of memory, while Haskell lists consist of separate linked elements that point to the next one. Haskell also has some additional overhead from lazy evaluation.
+
+### Comparison of C++ and Haskell Implementations
+
+Both implementations use recursion and list processing to simulate the elimination process. However, their performance was different. My original C++ implementation received 97/100 because of a memory overflow on Test 29. After changing it to modify the existing vector instead of creating a new one, I managed to reduce memory usage and receive 100/100.My Haskell implementation received 97/100 because Test 29 exceeded the time limit. This shows that even though both implementations follow the same logic, the way each language handles lists and memory can affect their performance.
 
 
